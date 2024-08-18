@@ -1,0 +1,46 @@
+.edit-question-container {
+  width: 80%;
+  max-width: 600px;
+  margin: auto;
+  min-height: 70vh;
+}
+
+.edit-question-container h2 {
+  text-align: center;
+  margin: 30px;
+}
+
+.edit-question-container .form-group {
+  margin-bottom: 15px;
+}
+
+.edit-question-container label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.edit-question-container input,
+.edit-question-container textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.edit-question-container button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.edit-question-container button:hover {
+  background-color: #0056b3;
+}
+
+.error-message {
+  color: red;
+  text-align: center;
+}

@@ -1,0 +1,125 @@
+.question-container {
+  width: 80%;
+  margin: 40px auto;
+  padding: 2rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+}
+
+.title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #333;
+  text-align: center;
+}
+
+.steps-list {
+  list-style: none;
+  padding: 0;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+.steps-list li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.list-icon {
+  margin-right: 0.5rem;
+  color: #007bff; /* Customize the color of the arrow icon */
+}
+
+.post-question-form {
+  margin-top: 2rem;
+}
+
+.form-title {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.question-title-input,
+.question-details-textarea {
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.question-details-textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+.question-title-input::placeholder,
+.question-details-textarea::placeholder {
+  color: #888;
+}
+
+.tag-container {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.tag-input {
+  width: calc(100% - 110px);
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  margin-right: 10px;
+  display: inline-block;
+}
+
+.add-tag-button {
+    margin: 20px;
+  width: 100px;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.add-tag-button:hover {
+  background-color: #0056b3;
+}
+
+.tags-list {
+  margin-top: 1rem;
+}
+
+.tag {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+  background-color: #e1e1e1;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.submit-button:hover {
+  background-color: #0056b3;
+}

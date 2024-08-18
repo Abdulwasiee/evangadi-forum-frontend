@@ -1,0 +1,150 @@
+
+.header-container {
+  width: auto;
+  background-color: #fff;
+  border-bottom: 1px solid #ddd;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 10vh;
+}
+
+.nav-container {
+  display: flex;
+  width: 70%;
+  margin: auto;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo img {
+  height: 40px;
+}
+
+.burger-menu {
+  display: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: #007bff;
+  margin-right: 20px;
+}
+
+.close-menu {
+  display: none;
+  font-size: 28px;
+  cursor: pointer;
+  color: #007bff; 
+ margin-right: 80px;
+  z-index: 101; 
+}
+
+.list-container {
+  margin-left: auto;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: auto;
+  background-color: transparent;
+}
+
+.list-container li {
+  margin: 0.5rem;
+}
+
+.list-container.active {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  height: 100vh;
+  width: 250px;
+  padding-top: 50px;
+  z-index: 100;
+  transition: right 0.3s ease;
+}
+
+@media (max-width: 800px) {
+  .burger-menu {
+    display: block;
+  }
+
+  .close-menu.show {
+    display: block;
+  }
+
+  .list-container {
+    display: none;
+  }
+
+  .list-container.active {
+    display: flex;
+  }
+.list-container .hide {
+  display: none;
+}
+  .burger-menu.hide {
+    display: none;
+  }
+}
+
+
+.dropdown {
+  position: relative;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #fff;
+  min-width: 220px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+  z-index: 1;
+  padding: 8px 0;
+  border-radius: 4px;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+}
+
+.dropdown-content li {
+  margin: 0;
+}
+
+.dropdown-content a {
+  padding: 10px 20px;
+  display: block;
+  color: #333;
+  text-decoration: none;
+}
+
+.dropdown-content a:hover {
+  background-color: #f4f4f4;
+  border-radius: 4px;
+}
+
+.logout-button {
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.logout-button:hover {
+  text-decoration: underline;
+}
