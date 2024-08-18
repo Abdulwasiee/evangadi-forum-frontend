@@ -82,6 +82,7 @@
 
   .close-menu.show {
     display: block;
+    margin-bottom: 30px;
   }
 
   .list-container {
@@ -90,6 +91,7 @@
 
   .list-container.active {
     display: flex;
+    margin-bottom: 20px;
   }
 .list-container .hide {
   display: none;
@@ -102,7 +104,9 @@
 
 .dropdown {
   position: relative;
+
 }
+
 
 .dropdown-content {
   display: none;
