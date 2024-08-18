@@ -1,11 +1,8 @@
-
 .questions-container {
   padding: 20px;
   min-height: 70vh;
   width: auto;
- 
 }
-
 
 .header {
   display: flex;
@@ -28,11 +25,9 @@
   background-color: #0056b3;
 }
 
-
 .user-welcome {
   display: flex;
   align-items: center;
-
 }
 
 .welcome-icon {
@@ -45,12 +40,10 @@
   font-weight: bold;
 }
 
-
 .search-bar {
   margin: 20px 0;
   text-align: center;
 }
-
 
 .search-bar input {
   width: 100%;
@@ -63,7 +56,6 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-
 .search-bar input:focus {
   border-color: #007bff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -75,6 +67,8 @@
 }
 
 .question-item {
+  display: flex;
+  flex-direction: column;
   border: 1px solid #ddd;
   border-radius: 5px;
   margin-bottom: 10px;
@@ -82,19 +76,19 @@
   background-color: #f9f9f9;
 }
 
-
 .action-buttons {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  margin-right: 10px;
 }
 
 .edit-icon,
 .delete-icon {
+  color: red;
   font-size: 18px;
-  margin-left: 10px;
+  margin-right: 10px;
   cursor: pointer;
 }
-
 
 .confirmation-dialog {
   position: fixed;
@@ -149,9 +143,8 @@
   background-color: #5a6268;
 }
 
-/* Error message styling */
 .error-message {
   color: red;
   text-align: center;
-  margin-top: 20px;
+  margin-top: 10px;
 }

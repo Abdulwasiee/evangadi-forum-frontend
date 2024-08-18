@@ -20,9 +20,11 @@
   justify-content: space-between;
   align-items: center;
 }
-
+.logo{
+  margin-right: 1.5rem;
+}
 .logo img {
-  height: 40px;
+  height: 25px;
 }
 
 .burger-menu {
@@ -71,6 +73,9 @@
 }
 
 @media (max-width: 800px) {
+  .header-container{
+    width: auto;
+  }
   .burger-menu {
     display: block;
   }

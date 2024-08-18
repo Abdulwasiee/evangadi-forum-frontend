@@ -161,7 +161,6 @@ function Home() {
           {filteredQuestions.length > 0 ? (
             filteredQuestions.map((question) => (
               <li key={question.questionid} className="question-item">
-                <Question question={question} searchTerm={searchTerm} />
                 <div className="action-buttons">
                   {isAuthenticated && (
                     <>
@@ -180,6 +179,7 @@ function Home() {
                     </>
                   )}
                 </div>
+                <Question question={question} searchTerm={searchTerm} />
               </li>
             ))
           ) : (
