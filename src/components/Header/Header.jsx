@@ -9,6 +9,7 @@ const Header = () => {
   const { isAuthenticated, logout } = useContext(AuthContext);
   const [menuActive, setMenuActive] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 800);
+  const [showLogoutModal, setShowLogoutModal] = useState(false); // Control modal visibility
 
   const toggleMenu = () => {
     setMenuActive(!menuActive);
@@ -20,6 +21,19 @@ const Header = () => {
     if (!mobileView) {
       setMenuActive(false);
     }
+  };
+
+  const handleLogoutClick = () => {
+    setShowLogoutModal(true); // Show the modal on logout click
+  };
+
+  const confirmLogout = () => {
+    setShowLogoutModal(false); // Close the modal
+    logout(); // Call logout after confirmation
+  };
+
+  const cancelLogout = () => {
+    setShowLogoutModal(false); // Close the modal without logging out
   };
 
   useEffect(() => {
@@ -67,7 +81,7 @@ const Header = () => {
           </li>
           {isAuthenticated ? (
             <li>
-              <button className="logout-button" onClick={logout}>
+              <button className="logout-button" onClick={handleLogoutClick}>
                 Log Out
               </button>
             </li>
@@ -78,6 +92,21 @@ const Header = () => {
           )}
         </ul>
       </section>
+
+      {/* Modal for logout confirmation */}
+      {showLogoutModal && (
+        <div className="modal">
+          <div className="modal-content">
+            <p>Are you sure you want to log out?</p>
+            <button onClick={confirmLogout} className="confirm-btn">
+              Yes
+            </button>
+            <button onClick={cancelLogout} className="cancel-btn">
+              No
+            </button>
+          </div>
+        </div>
+      )}
     </header>
   );
 };

@@ -1,13 +1,13 @@
 import React, { useState, useContext } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../Auth/Auth"; // Ensure correct import path
+import { AuthContext } from "../Auth/Auth";
 import "./register.css";
 import { axiosInstance } from "../../utility/axios";
-import { FaEye, FaEyeSlash } from "react-icons/fa"; // Import icons for toggling
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Register = () => {
-  const { login } = useContext(AuthContext); // Access login function from context
+  const { login } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     email: "",
     username: "",
@@ -17,7 +17,8 @@ const Register = () => {
   });
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
-  const [showPassword, setShowPassword] = useState(false); // State to manage password visibility
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false); // Track loading state
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -27,15 +28,14 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Start spinner
     try {
       const response = await axiosInstance.post("/api/user/register", formData);
 
-      // Clear any existing token
       localStorage.removeItem("authToken");
 
-      // Store the new token
       localStorage.setItem("authToken", `Bearer ${response.data.token}`);
-      await login(response.data.token); // Update context with the new token
+      await login(response.data.token);
       setMessage(response.data.msg);
       setError("");
       setFormData({
@@ -46,7 +46,6 @@ const Register = () => {
         lastname: "",
       });
 
-      // Redirect to the home page after a short delay
       setTimeout(() => {
         navigate("/home");
       }, 500);
@@ -57,6 +56,8 @@ const Register = () => {
         setError("An unexpected error occurred.");
       }
       setMessage("");
+    } finally {
+      setLoading(false); // Stop spinner
     }
   };
 
@@ -79,7 +80,6 @@ const Register = () => {
             placeholder="Enter your email"
             value={formData.email}
             onChange={handleChange}
-            required
           />
         </div>
         <div className="fullName">
@@ -91,7 +91,6 @@ const Register = () => {
               placeholder="Enter your first name"
               value={formData.firstname}
               onChange={handleChange}
-              required
             />
           </div>
           <div className="form-input">
@@ -102,7 +101,6 @@ const Register = () => {
               placeholder="Enter your last name"
               value={formData.lastname}
               onChange={handleChange}
-              required
             />
           </div>
         </div>
@@ -114,30 +112,28 @@ const Register = () => {
             placeholder="Enter your username"
             value={formData.username}
             onChange={handleChange}
-            required
           />
         </div>
         <div className="form-input password-input">
           <input
-            type={showPassword ? "text" : "password"} // Toggle password visibility
+            type={showPassword ? "text" : "password"}
             id="password"
             name="password"
             placeholder="Enter your password"
             value={formData.password}
             onChange={handleChange}
-            required
           />
           <button
             type="button"
             className="password-toggle"
             onClick={togglePasswordVisibility}
           >
-            {showPassword ? <FaEye /> : <FaEyeSlash />} {/* Toggle icon */}
+            {showPassword ? <FaEye /> : <FaEyeSlash />}
           </button>
         </div>
 
-        <button type="submit" className="register-button">
-          Register
+        <button type="submit" className="register-button" disabled={loading}>
+          {loading ? <span className="spinner"></span> : "Register"}
         </button>
         <br />
         <br />

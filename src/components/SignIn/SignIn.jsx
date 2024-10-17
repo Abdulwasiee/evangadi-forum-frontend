@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../Auth/Auth";
-import { axiosInstance } from "../../utility/axios"; 
+import { axiosInstance } from "../../utility/axios";
 import "./SignIn.css";
 
 const SignIn = () => {
@@ -14,6 +14,7 @@ const SignIn = () => {
   const [error, setError] = useState("");
   const [message, setMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false); // Track loading state
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -23,6 +24,7 @@ const SignIn = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Start spinner
     try {
       const response = await axiosInstance.post("/api/user/signin", formData, {
         headers: {
@@ -30,25 +32,23 @@ const SignIn = () => {
         },
       });
 
-     
-
-      if (response.status === 200) {
-        if (response.data.token) {
-          await login(response.data.token); 
-          setMessage(response.data.msg);
-          setError("");
-          setFormData({ username: "", password: "" });
-          navigate("/home");
-        } else {
-          setError("Token not received.");
-        }
-      } else {
-        setError(response.data.message || "Sign-in failed.");
-        setMessage("");
+      if (response.status === 200 && response.data.token) {
+        // Successful login
+        await login(response.data.token);
+        setMessage(response.data.msg || "Login successful!");
+        setError("");
+        setFormData({ username: "", password: "" });
+        navigate("/home");
       }
     } catch (error) {
-      setError("Error during sign-in. Please try again.");
+      if (error.response) {
+        setError(error.response.data.msg);
+      } else {
+        setError("An error occurred. Please try again.");
+      }
       setMessage("");
+    } finally {
+      setLoading(false); // Stop spinner
     }
   };
 
@@ -64,7 +64,6 @@ const SignIn = () => {
             placeholder="Enter your username"
             value={formData.username}
             onChange={handleChange}
-            required
           />
         </div>
         <div className="form-input password-input">
@@ -75,7 +74,6 @@ const SignIn = () => {
             placeholder="Enter your password"
             value={formData.password}
             onChange={handleChange}
-            required
           />
           <button
             type="button"
@@ -85,8 +83,8 @@ const SignIn = () => {
             {showPassword ? <FaEye /> : <FaEyeSlash />}
           </button>
         </div>
-        <button type="submit" className="signin-button">
-          Sign In
+        <button type="submit" className="signin-button" disabled={loading}>
+          {loading ? <span className="spinner"></span> : "Sign In"}
         </button>
         {error && <p className="error-message">{error}</p>}
         {message && <p className="success-message">{message}</p>}
