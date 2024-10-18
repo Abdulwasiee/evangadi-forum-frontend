@@ -17,6 +17,7 @@ function Home() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [questionToDelete, setQuestionToDelete] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false); // Spinner state
 
   const navigate = useNavigate();
 
@@ -108,6 +109,8 @@ function Home() {
       return;
     }
 
+    setIsDeleting(true); // Show spinner
+
     try {
       await axiosInstance.delete(`/api/question/${questionToDelete}`, {
         headers: {
@@ -124,6 +127,8 @@ function Home() {
     } catch (err) {
       console.error("Error deleting question:", err);
       setError("Failed to delete question");
+    } finally {
+      setIsDeleting(false); // Hide spinner after completion
     }
   };
 
@@ -196,8 +201,9 @@ function Home() {
                 <button
                   className="confirm-button"
                   onClick={confirmDeleteAction}
+                  disabled={isDeleting} // Disable button during delete action
                 >
-                  Confirm
+                  {isDeleting ? "Deleting..." : "Confirm"} {/* Spinner text */}
                 </button>
                 <button className="cancel-button" onClick={cancelDeleteAction}>
                   Cancel

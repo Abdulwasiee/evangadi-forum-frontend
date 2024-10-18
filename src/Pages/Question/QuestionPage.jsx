@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Layout from "../../components/Layout/Layout";
 import { FaArrowRight } from "react-icons/fa";
-
 import "./Question.css";
 import { axiosInstance } from "../../utility/axios";
 
@@ -12,23 +11,31 @@ function QuestionPage() {
   const [tagInput, setTagInput] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false); // Loading state for form submission
+  const [tagLoading, setTagLoading] = useState(false); // Loading state for adding a tag
 
   // Function to add a tag
   const handleAddTag = () => {
     if (tagInput && !tags.includes(tagInput)) {
-      setTags([...tags, tagInput]);
-      setTagInput("");
+      setTagLoading(true); // Show spinner while adding tag
+      setTimeout(() => {
+        setTags([...tags, tagInput]);
+        setTagInput("");
+        setTagLoading(false); // Hide spinner after tag is added
+      }, 500); // Simulate a delay for tag addition
     }
   };
 
   // Function to handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true); // Show spinner while submitting
 
     try {
       const token = localStorage.getItem("authToken");
       if (!token) {
         setError("No authentication token found.");
+        setLoading(false);
         return;
       }
 
@@ -47,10 +54,7 @@ function QuestionPage() {
         }
       );
 
-      // Axios response does not require .json() method
-      const result = response.data;
-
-      setSuccess(result.msg || "Question posted successfully.");
+      setSuccess(response.data.msg || "Question posted successfully.");
       setTitle("");
       setDescription("");
       setTags([]);
@@ -59,6 +63,8 @@ function QuestionPage() {
       console.error("Error posting question:", error);
       setError("Error posting question. Please try again.");
       setSuccess("");
+    } finally {
+      setLoading(false); // Hide spinner after submission
     }
   };
 
@@ -114,8 +120,9 @@ function QuestionPage() {
                 className="add-tag-button"
                 type="button"
                 onClick={handleAddTag}
+                disabled={tagLoading} // Disable button when loading
               >
-                Add Tag
+                {tagLoading ? "Adding..." : "Add Tag"} {/* Spinner text */}
               </button>
               <div className="tags-list">
                 {tags.map((tag, index) => (
@@ -125,8 +132,9 @@ function QuestionPage() {
                 ))}
               </div>
             </div>
-            <button type="submit" className="submit-button">
-              Submit Question
+            <button type="submit" className="submit-button" disabled={loading}>
+              {loading ? "Submitting..." : "Submit Question"}{" "}
+              {/* Spinner text */}
             </button>
           </form>
           {error && <p className="error-message">{error}</p>}

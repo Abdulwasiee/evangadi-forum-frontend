@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { FaUserCircle, FaEdit, FaTrash } from "react-icons/fa";
 import { formatDistanceToNow } from "date-fns";
+import ClipLoader from "react-spinners/ClipLoader"; // Import the ClipLoader
 import "./Answer.css";
 import Layout from "../../components/Layout/Layout";
 import { axiosInstance } from "../../utility/axios";
@@ -15,10 +16,13 @@ const AnswerPage = () => {
   const [question, setQuestion] = useState(null);
   const [refresh, setRefresh] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(null);
+  const [loading, setLoading] = useState(false); // Loading state for both submit and delete
+  const [deleteLoading, setDeleteLoading] = useState(null); // Loading for delete
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setLoading(true);
         const [questionResponse, answersResponse] = await Promise.all([
           axiosInstance.get(`/api/question/${questionId}`),
           axiosInstance.get(`/api/answer/${questionId}`),
@@ -41,6 +45,8 @@ const AnswerPage = () => {
         const errorMsg = err.response?.data?.msg || "Failed to fetch data";
         setError(errorMsg);
         console.error("Error fetching data:", err);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -54,7 +60,7 @@ const AnswerPage = () => {
         if (token) {
           const response = await axiosInstance.get("/api/user/checkUser", {
             headers: {
-              Authorization: `${token}`, // Added Bearer prefix
+              Authorization: `${token}`,
             },
           });
           setUserName(response.data.user.username);
@@ -73,6 +79,7 @@ const AnswerPage = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true); // Start the spinner when submitting
     try {
       const token = localStorage.getItem("authToken");
       if (token) {
@@ -81,7 +88,7 @@ const AnswerPage = () => {
           { questionid: questionId, answer: newAnswer },
           {
             headers: {
-              Authorization: `${token}`, // Added Bearer prefix
+              Authorization: `${token}`,
             },
           }
         );
@@ -92,6 +99,8 @@ const AnswerPage = () => {
       const errorMsg = err.response?.data?.msg || "Failed to post answer";
       setError(errorMsg);
       console.error("Error posting answer:", err);
+    } finally {
+      setLoading(false); // Stop the spinner
     }
   };
 
@@ -100,21 +109,24 @@ const AnswerPage = () => {
   };
 
   const confirmDeleteAnswer = async () => {
+    setDeleteLoading(confirmDelete); // Start spinner for deleting specific answer
     try {
       const token = localStorage.getItem("authToken");
       if (token && confirmDelete) {
         await axiosInstance.delete(`/api/answer/${confirmDelete}`, {
           headers: {
-            Authorization: `${token}`, // Added Bearer prefix
+            Authorization: `${token}`,
           },
         });
-        setConfirmDelete(null); // Reset confirmation
+        setConfirmDelete(null);
         setRefresh((prev) => !prev);
       }
     } catch (err) {
       const errorMsg = err.response?.data?.msg || "Failed to delete answer";
       setError(errorMsg);
       console.error("Error deleting answer:", err);
+    } finally {
+      setDeleteLoading(null); // Stop the delete spinner
     }
   };
 
@@ -156,7 +168,7 @@ const AnswerPage = () => {
                   <span className="answer-provider">
                     {answer.firstname} {answer.lastname}
                   </span>
-                  {userName === answer.username && (
+                  {userName === answer.username.toLowerCase() && (
                     <div className="answer-actions">
                       <Link
                         to={`/edit-answer/${answer.id}/${questionId}`}
@@ -168,7 +180,11 @@ const AnswerPage = () => {
                         onClick={() => handleDelete(answer.id)}
                         className="delete-button"
                       >
-                        <FaTrash className="delete-icon" />
+                        {deleteLoading === answer.id ? (
+                          <ClipLoader size={20} />
+                        ) : (
+                          <FaTrash className="delete-icon" />
+                        )}
                       </button>
                     </div>
                   )}
@@ -187,7 +203,9 @@ const AnswerPage = () => {
               placeholder="Write your answer here..."
               required
             />
-            <button type="submit">Submit Answer</button>
+            <button type="submit" disabled={loading}>
+              {loading ? <ClipLoader size={20} /> : "Submit Answer"}
+            </button>
           </form>
         )}
         {confirmDelete && (
